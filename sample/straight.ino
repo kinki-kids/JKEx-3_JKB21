@@ -19,7 +19,6 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   
   //センサ値
   int val0 = analogRead(A0);
