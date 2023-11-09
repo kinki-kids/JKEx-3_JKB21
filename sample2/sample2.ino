@@ -15,6 +15,7 @@ const int threshold = 980;
 // フォトリフレクタ
 const int sensor0 = A0;
 const int sensor1 = A1;
+const int sensor1 = A2;
 
 // センサから読み取った値（analog）
 int val0 = 0;
@@ -36,22 +37,58 @@ void loop() {
   // センサの値をアナログ値で読み取る
   val0 = analogRead(sensor0);
   val1 = analogRead(sensor1);
+  val2 = analogRead(sensor2);
   
   bool judgeA0 = val0 > threshold;
   bool judgeA1 = val1 > threshold;
+  bool judgeA2 = val2 > threshold;
 
-  if(judgeA0){
+
+  //方向転換
+  if(judgeA0 & judgeA1 & judgeA2){
+    //静止
+  }else if(!judgeA0 & !judgeA1 & !judgeA2){
+    //前進
     analogWrite(pwm_r1, 150);
     analogWrite(pwm_r2, 0);
     analogWrite(pwm_l1, 150);
     analogWrite(pwm_l2, 0);
-    //delay(20);
-  }else{
+  }else if(!judgeA0 & !judgeA1 & judgeA2){
+    //右に少し曲がる
+    analogWrite(pwm_r1, 150);
+    analogWrite(pwm_r2, 0);
+    analogWrite(pwm_l1, 120);
+    analogWrite(pwm_l2, 0);
+  }else if(!judgeA0 & judgeA1 & !judgeA2){
+    //左に少し曲がる
+    analogWrite(pwm_r1, 120);
+    analogWrite(pwm_r2, 0);
+    analogWrite(pwm_l1, 150);
+    analogWrite(pwm_l2, 0);
+  }else if(judgeA0 & !judgeA1 & !judgeA2){
+    //後退
     analogWrite(pwm_r1, 0);
     analogWrite(pwm_r2, 150);
     analogWrite(pwm_l1, 0);
     analogWrite(pwm_l2, 150);
-    //delay(20);
+  }else if(judgeA0 & judgeA1 & !judgeA2){
+    //右に大きく曲がる
+    analogWrite(pwm_r1, 150);
+    analogWrite(pwm_r2, 0);
+    analogWrite(pwm_l1, 30);
+    analogWrite(pwm_l2, 0);
+  }else if(judgeA0 & !judgeA1 & judgeA2){
+    //左に大きく曲がる
+    analogWrite(pwm_r1, 30);
+    analogWrite(pwm_r2, 0);
+    analogWrite(pwm_l1, 150);
+    analogWrite(pwm_l2, 0);
+  }else if(!judgeA0 & judgeA1 & judgeA2){
+    //前進
+    analogWrite(pwm_r1, 150);
+    analogWrite(pwm_r2, 0);
+    analogWrite(pwm_l1, 150);
+    analogWrite(pwm_l2, 0);
   }
 
 
